@@ -1,6 +1,6 @@
-FROM centos:6
+FROM centos:7
 
-RUN yum install openssh-server -y
+RUN yum install openssh-server epel-release -y
 RUN yum install openssh-clients -y
 ADD packages_preinstalled.txt /
 RUN for i in `cat /packages_preinstalled.txt` ; do yum install -y $i* ; done

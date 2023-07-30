@@ -5,7 +5,7 @@
 # Description: Script to start up the docker-hdp-cluster on every Docker Host
 ########
 
-#set -x
+set -x
 
 start() {
 

@@ -4,7 +4,7 @@
 # Project: Docker HDP Lab
 # Description: Run this script to build a new Docker images for Ambari-agent and ambari-server, and to distribute them on other Docker hosts
 ########
-
+set -x
 __check_n_create_dir() {
 	if [ ! -d /opt/docker_cluster/ambari-server-$AMBARI_VERSION ];then
 		mkdir -p /opt/docker_cluster/ambari-server-$AMBARI_VERSION
@@ -45,7 +45,7 @@ __build_n_save_image(){
 	if [ ! $? -eq 0 ]; then
 		echo -e "\nBuilding docker image for ambari-agent-$AMBARI_VERSION...\n"
 		set -e
-       		 docker build -t hdp/ambari-agent-$AMBARI_VERSION .
+       		 docker build --no-cache -t hdp/ambari-agent-$AMBARI_VERSION .
 		set +e
 		sleep 5
 	fi
@@ -84,24 +84,14 @@ source /etc/docker-hdp-lab.conf
 if [ $# -ne 2 ];then
  echo -e "\nInvalid Number of Argument(s)"
  echo "Usage::  build_image.sh <AmbariVersion> <RepoURL>"
- echo -e "\nExample:: Using Public Repository...\n\t build_image.sh  2.2.2.0  http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.2.2.0/"
- echo -e "\t build_image.sh 2.2.1.1  http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.2.1.1"
- echo -e "\t build_image.sh 2.2.1.0  http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.2.1.0 "
- echo -e "\t build_image.sh 2.2.0.0  http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.2.0.0 "
- echo -e "\t build_image.sh 2.1.2.1  http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.1.2.1 "
- echo -e "\t build_image.sh 2.1.2    http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.1.2 "
- echo -e "\t build_image.sh 2.1.1    http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.1.1 "
- echo -e "\t build_image.sh 2.1.0    http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.1.0 "
- echo -e "\t build_image.sh 2.0.2    http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.0.2 "
- echo -e "\t build_image.sh 2.0.1    http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.0.1 "
- echo -e "\t build_image.sh 2.0.0    http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.0.0 "
- echo -e "\t build_image.sh  1.7.0   http://public-repo-1.hortonworks.com/ambari/centos6/1.x/updates/1.7.0\n\n"
+ echo -e "\nExample:: Using Public Repository...\n\t build_image.sh  2.7.6.0.0  http://10.90.6.82/AMBARI-2.7.6.0.0_20Jun"
+ echo -e "\t build_image.sh 2.7.6.0.0  http://10.90.6.82/AMBARI-2.7.6.0.0_20Jun"
  exit 1
 fi
 
 if [ $( echo $1 | egrep '[^.0-9]')  ]
 then
-  echo -e "\nThe first argument should be the Ambari version. For example: 2.2.2.0"
+  echo -e "\nThe first argument should be the Ambari version. For example: 2.7.6.0.0"
   echo -e "\tUsage::  build_image.sh <AmbariVersion> <RepoURL>\n"
   exit
 fi
@@ -123,7 +113,7 @@ grep "Name or service not known" /tmp/ambari_repo_validation_check.out
 if [ $? -eq 0 ] 
 then
 	echo -e "\nIncorrect Repo URL Or Name Resolution failure"
-	echo -e "Example::  ./build_image.sh  2.2.2.0  http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.2.2.0/\n"
+	echo -e "Example::  ./build_image.sh  2.7.6.0.0 http://$LOCAL_REPO_NODE/AMBARI-2.7.6.0.0/centos7/2.7.6.0.0/\n"
 	exit 1
 fi
 

@@ -1,5 +1,5 @@
 [ambari]
 name=Ambari
-baseurl=http://10.200.8.196/repos/ambari/centos6/1.x/updates/1.7.0/
+baseurl=http://10.90.6.82/AMBARI-2.7.6.0.0_20Jun
 gpgcheck=0
 enabled=1
